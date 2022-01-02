@@ -1,4 +1,5 @@
-import plotly.express as px
+#import plotly.express as px
+import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -10,15 +11,16 @@ df = df.set_index(pd.to_datetime(df['created_at']))
 
 weekly = df['compound'].resample('W').mean().fillna(0)
 
-fig = px.line(data_frame=weekly, x=weekly.index, y=weekly, title="test")
+fig = go.Figure()
 
-# Create buttons
-#fin_buttons = [
-#  {'count': 7, 'label': "1WTD", 'step': "day", 'stepmode': "todate"},
-#  {'count': 6, 'label': "6MTD", 'step': "month", 'stepmode': "todate"},
-#  {'count': 1, 'label': "YTD", 'step': "year", 'stepmode': "todate"}
-#]
+graph_one = go.Scatter(x=weekly.index, y=weekly, mode='lines')
 
-# Create the date range buttons & show the plot
-#fig.update_layout({'xaxis': {'rangeselector': {'buttons': fin_buttons}}})
+layout_one = dict(title = 'Chart One',
+                xaxis = dict(title = 'x-axis label'),
+                yaxis = dict(title = 'y-axis label'),
+                )
+
+fig.add_trace(graph_one)
+#fig = dict(data = graph_one, layout = layout_one)
+
 fig.show()
