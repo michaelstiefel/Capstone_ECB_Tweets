@@ -175,52 +175,9 @@ for file in files:
 df_tweets = pd.concat(all_dfs)
 print(df_tweets.head())
 print(df_tweets.info())
-df_tweets.to_csv('./data/tweets_and_sentiment.csv')
 
-with open('./data/df_tweets.pkl', 'wb') as f:
+# Save the data as csv and pickle files
+
+df_tweets.to_csv('./webapp/data/tweets_and_sentiment.csv')
+with open('./webapp/data/df_tweets.pkl', 'wb') as f:
     pickle.dump(df_tweets, f)
-
-
-#list_of_tweets = []
-#list_year_month = [('2020', '10'), ('2020', '11'), ('2020', '12'), ('2021', '01')]
-#list_year_month = [('2020', '10'), ('2020', '11'), ('2020', '12'), ('2021', '01'), ('2021', '02')]
-#for year, month in list_year_month:
-#    prefix = "./{0}/{1}/".format(year,month)
-
-#    response = s3.list_objects(Bucket = S3_BUCKET, Prefix = prefix)
-#    counter = 0
-
-#    for file in response['Contents']:
-    #local_path = "Temp/" + str(counter) +".json"
-    #s3.download_file(Bucket = S3_BUCKET, Key = file['Key'], Filename = local_path)
-#        obj = s3.get_object(Bucket = S3_BUCKET, Key = file['Key'])
-#        counter += 1
-#        print(counter)
-#        print(file['Key'])
-
-#        obj_body = obj['Body'].read().decode('utf-8')
-#        list_of_tweets.append(flatten_tweets(obj_body.splitlines()))
-#        #time.sleep(1)
-
-#df_tweets = pd.concat(list_of_tweets)
-
-
-#print(df_tweets.info())
-
-
-
-#print(df_tweets.head())
-#print(df_tweets['text'].values[:5])
-
-#df_tweets.to_csv("./ECB_Tweets/df_tweets.csv",
-#                index = False,
-#                header = True,
-#                sep="|",
-#                chunksize = 100000,
-#                encoding = 'utf-8'
-#)
-
-
-    #    list_of_tweets.append(tweet)
-    #    print(len(list_of_tweets)).head()
-    #list_of_json_files.append(list_of_tweets)
