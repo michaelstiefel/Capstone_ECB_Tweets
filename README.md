@@ -96,9 +96,8 @@ See the description under "How to execute the analysis"
 ## Refinement
 
 The stopwords from NLTK do not capture all stopwords in Tweets (like RT for Retweet).
-Those will be manually added. Also some user feature in the most important words,
+Those words have been manually added to the list of stopwords to not influence the most often used words. Also some users feature in the most often used words,
 probably stemming from bots or bots replying to those users. Those users are also included in the list of stopwords.
-
 
 ## Results / Justification
 
