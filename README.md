@@ -1,12 +1,16 @@
 # Capstone Project: Twitter Sentiment about the European Central Bank
 
-## Introduction
+## Project Overview
 
 This project is part of the Udacity Data Scientist Nanodegree Program. Its purpose is to create a flask web app to illustrate insights from tweets about the European Central Bank (ECB) in 2021. Specifically, the following questions will be addressed:
+
+## Problem Statement
 
 - Does Twitter traffic (i.e. the number of tweets) respond to key ecb decision dates?
 - Does Twitter Sentiment change on days when the ECB decided on its monetary policy?
 - What are the topics discussed by users on Twitter and how do they change over time?
+
+## Metrics
 
 ## Data
 
@@ -31,6 +35,7 @@ This python file scrapes all decision dates from the ECB's homepage and saves th
 
 - webapp_venv: This folder contains the virtual environment for running this repository and the webapp
 
+
 ## How to execute the analysis
 
 1. Complete the AWS credentials with your credentials, fill out the name of the AWS S3 bucket and save the file as capstone_project.cfg
@@ -41,7 +46,24 @@ This python file scrapes all decision dates from the ECB's homepage and saves th
 
 4. Run ecb_sentiment_app.py in the webapp folder. Open the suggested url (it may take a while to load). The url should look like the screenshot in results below.
 
-## Results
+
+## Data Exploration
+
+
+## Data Visualization
+
+## Data Preprocessing
+
+## Implementation
+
+## Refinement
+
+
+
+
+
+
+## Results / Justification
 
 ![Screenshot](webapp_ecb.png)
 
@@ -54,7 +76,7 @@ The third graph shows the distribution of the sentiment score of the single twee
 The fourth graph shows the words used most often by Twitter users (stopwords and Twitter terms such as 'RT' for retweet have been removed). It becomes clear that the most often used word discussed about the ECB is "inflation". On the one hand, given the ECB's mandate to ensure price stability, it is reassuring that the ECB's policy discussion is around its strategic objective. On the other hand, it is surprising that the pandemic is mentioned far less often in 2021 than "climate". Apparently, more users seem to join the debate whether the ECB should fight climate change rather than the ECB's pandemic policy.
 
 
-## Conclusions and directions for future research
+## Reflection and Improvement
 
 This project has shown that Twitter is a useful medium to discuss the responses about monetary policy decisions by the ECB.
 
