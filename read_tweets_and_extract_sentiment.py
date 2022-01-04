@@ -166,13 +166,22 @@ for file in files:
         df['compound']  = df['sentiment_scores'].apply(lambda score_dict: score_dict['compound'])
 
         # For preliminary analysis, focus only on the following variables
-        df = df[['id', 'created_at', 'all_text', 'compound', 'user_id', 'user_followers_count', 'user_verified']]
+        df = df[['id', 'created_at', 'all_text', 'compound', 'user_id', 'user_followers_count', 'user_verified', 'lang']]
         all_dfs.append(df)
     except:
         continue
 
 # Bring list of dataframes into a single data frame
 df_tweets = pd.concat(all_dfs)
+
+# Filter for English language
+df_tweets = df_tweets[df_tweets['lang'] == 'en']
+
+# Exclude all tweets that contain the word cricket
+df_tweets[~df_tweets['all_text'].str.contains('cricket', case=False, regex=False)]
+df_tweets[~df_tweets['all_text'].str.contains('bcci', case=False, regex=False)]
+
+
 print(df_tweets.head())
 print(df_tweets.info())
 

@@ -4,7 +4,7 @@
 
 This project is part of the Udacity Data Scientist Nanodegree Program. Its purpose is to create a flask web app to illustrate insights from tweets about the European Central Bank (ECB) in 2021. Specifically, the following questions will be addressed:
 
-- How does Twitter Sentiment about the European Central Bank change over time?
+- Does Twitter traffic (i.e. the number of tweets) respond to key ecb decision dates?
 - Does Twitter Sentiment change on days when the ECB decided on its monetary policy?
 - What are the topics discussed by users on Twitter and how do they change over time?
 
@@ -25,14 +25,38 @@ This file reads and cleans the tweets. It flattens and converts the tweets from 
 
 This config file should be filled with the AWS credentials and the name of the AWS S3 bucket
 
+- read_monetary_policy_decisions.py
+
+This python file scrapes all decision dates from the ECB's homepage and saves them as a csv in ecb_decision_dates.csv (located in webapp/data)
+
+- webapp_venv: This folder contains the virtual environment for running this repository and the webapp
+
 ## How to execute the analysis
 
 1. Complete the AWS credentials with your credentials, fill out the name of the AWS S3 bucket and save the file as capstone_project.cfg
 
-2. Run read_tweets_and_extract_sentiment.py: This generates the data as a pickle (and also csv file) in the folder webapp/data
+2. Run read_monetary_policy_decisions.py to generate the csv with the ECB decision dates
 
-3. Run ecb_sentiment_app.py in the webapp folder.
+3. Run read_tweets_and_extract_sentiment.py: This generates the data as a pickle (and also csv file) in the folder webapp/data
+
+4. Run ecb_sentiment_app.py in the webapp folder. Open the suggested url (it may take a while to load). The url should look like the screenshot in results below.
 
 ## Results
 
+![Screenshot](webapp_ecb.png)
+
+The first graph shows the daily number of tweets related to the ECB (blue line) and the ECB key decision dates (dashed red line). It is visible that Twitter is used as a medium to discuss and share news about ECB decisions, which clearly answers the first question.
+
+The second graph shows the average daily sentiment (blue line) and the key ECB decision dates (dashed red line). Here, there is no clear pattern but it seems that if anything, the decision dates correspond to the lower points in the sentiment curve. That means, that overall users do not seem to have a positive sentiment towards the actions. However, this pattern does not hold on all decision dates.
+
+The third graph shows the distribution of the sentiment score of the single tweets. As it is visible, the clear majority of tweets have a neutral sentiment, which means that most users discuss the ECB's monetary policy rather objectively and without big sentiment.
+
+The fourth graph shows the words used most often by Twitter users (stopwords and Twitter terms such as 'RT' for retweet have been removed). It becomes clear that the most often used word discussed about the ECB is "inflation". On the one hand, given the ECB's mandate to ensure price stability, it is reassuring that the ECB's policy discussion is around its strategic objective. On the other hand, it is surprising that the pandemic is mentioned far less often in 2021 than "climate". Apparently, more users seem to join the debate whether the ECB should fight climate change rather than the ECB's pandemic policy.
+
+
 ## Conclusions and directions for future research
+
+This project has shown that Twitter is a useful medium to discuss the responses about monetary policy decisions by the ECB.
+
+To extend the project, first of all the data cleaning could be incorporated to filter out more tweets about cricket (that the ECB keyword also captures). For example, key players could be incorporated here or a machine learning algorithm could be used for cleaning.
+Another extension is data fields from Twitter that have not been used so far. It would be interesting to see whether there are differences between users with more followers or verified users. Last but not least, it would be useful to analyse the changes in sentiment and discussed topics more clearly. Did topics change over time and do those changes explain the changes in sentiment?
