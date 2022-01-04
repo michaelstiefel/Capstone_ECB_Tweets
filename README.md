@@ -4,6 +4,8 @@
 
 This project is part of the Udacity Data Scientist Nanodegree Program. Its purpose is to create a flask web app to illustrate insights from tweets about the European Central Bank (ECB) in 2021. Specifically, the following questions will be addressed:
 
+Setting: The European Central Bank holds a policy meeting approximately every six weeks. An important part of monetary policy is the guidance of future expectations. For this reason, reactions on Twitter could be a useful signal for monetary policy.
+
 ## Problem Statement
 
 - Does Twitter traffic (i.e. the number of tweets) respond to key ecb decision dates?
@@ -11,6 +13,12 @@ This project is part of the Udacity Data Scientist Nanodegree Program. Its purpo
 - What are the topics discussed by users on Twitter and how do they change over time?
 
 ## Metrics
+
+This analysis will mainly focus on two metrics:
+
+- The daily number of tweets as a proxy for importance: More tweets mean that there is more discussion about the ECB on this particular day
+- The compound sentiment (provided by VaderSentiment, a sentiment analysis tool for social media, see link below). In short, a positive / negative score is associated to each word in the tweet. The compound
+sentiment is the sum of all words in a tweet and then normalized to be between 0 and 1.
 
 ## Data
 
@@ -49,18 +57,47 @@ This python file scrapes all decision dates from the ECB's homepage and saves th
 
 ## Data Exploration
 
+The analysis in the webapp ecb_sentiment_app.py (step 4) takes two datasets built
+in step 3, the dataset /webapp/data/df_tweets.pkl. and step 2, the dataset webapp/data/ecb_decision_dates.csv.
+
+After filtering for the year 2021 and only focusing on English language tweets and
+excluding all tweets with the word cricket (that the streaming strategy with the keyword ecb might erroneously capture due to the English Wales Cricket Board (ECB as well)),
+the final dataset consists of 1246881 tweets with the following columns:
+id, created_at, all_text, compound, user_id, user_followers_count, user_verified, lang.
+
+The compound score corresponds to the Vader Sentiment metric (see above). The user information is not used as part of this analysis but retained here for future work.
+The column all_text comprises all text of a tweet (including mentioned retweets or quoted tweets).
+
+The data set ecb_decision dates simply contains the dates for all monetary policy ecb_decision_dates in 2021. There were nine events in 2021 that will be the focus of this analysis (red dashed line in graphs below).
+
 
 ## Data Visualization
 
+See the discussion in Results / Justification for more details.
+
+![Screenshot](webapp_ecb.png)
+
+
 ## Data Preprocessing
+
+The tweets streamed from Twitter come in json-files with a lot of meta information.
+The file read_tweets_and_extract_sentiment.py flattens those tweets and keeps only the most
+important columns for this analysis.
+
+The preprocessing of the tweets is an important step. As mentioned above, a key step here is
+to remove tweets about "Cricket" since streaming tweets about the European Central Bank with the abbreviation ECB also captures (to a small, but not negligible effect) tweets about the
+England Wales Cricket Board, also ECB. Here, this is ensured by deleting all tweets with the
+word 'Cricket'. This can be refined in the future by including more cricket specific words or by a ML algorithm.
 
 ## Implementation
 
+See the description under "How to execute the analysis"
+
 ## Refinement
 
-
-
-
+The stopwords from NLTK do not capture all stopwords in Tweets (like RT for Retweet).
+Those will be manually added. Also some user feature in the most important words,
+probably stemming from bots or bots replying to those users. Those users are also included in the list of stopwords.
 
 
 ## Results / Justification
