@@ -11,6 +11,7 @@ nltk.download('omw-1.4')
 import string
 import re
 import pickle
+from wordcloud import WordCloud
 
 
 ## Read in data and do elementary cleaning
@@ -18,49 +19,32 @@ df = pd.read_pickle("./webapp/data/df_tweets.pkl")
 df = df.set_index(pd.to_datetime(df['created_at']))
 
 df = df.sort_index().loc['2021-01-01':'2021-12-31']
-#df = df.sort_index().loc['2021-01-01':'2021-03-01']
+#df = df.sort_index().loc['2021-01-01':'2021-01-15']
 
+# Remove cricket-related tweets
 df = df[~df['all_text'].str.contains('cricket', case=False, regex=False)]
 
-X_train, X_test = train_test_split(df['all_text'].values, random_state = 42, test_size = 0.1)
+
+# Split data into training and test set for model evaluation
+X_train, X_test = train_test_split(df['all_text'].values, random_state = 42, test_size = 0.05)
 
 
 url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
 punct = list(string.punctuation)
 stopword_list = stopwords.words('english') + punct + ['rt', 'via', '…', '..', 'ecb', '’', '@ecb',
 'central', 'bank', '1x', 'easycopbots', 'schuldensuehner', 'like', 'urlplaceholder',
-'easycop', 'users', '“', 'ecb\'s', '...', 'profklausschwab', 'amp']
-
-def process_tweets(text, tokenizer=TweetTokenizer(), lemmatizer=WordNetLemmatizer(), stopwords=stopword_list):
-    """
-    Lowercase, tokenize tweets, remove stopwords, lemmatize
-    """
-
-    # Remove urls
-    detected_urls = re.findall(url_regex, text)
-    for url in detected_urls:
-        text = text.replace(url, "urlplaceholder")
-    text = text.lower()
-    tokens = tokenizer.tokenize(text)
+'easycop', 'users', '“', 'ecb\'s', '...', 'profklausschwab', 'amp', 'robinmonotti']
 
 
-    clean_tokens = [my_tok for my_tok in tokens if my_tok not in stopwords and not my_tok.isdigit()]
 
-    lemmatized_tokens = []
-    for tok in clean_tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
-        clean_tokens.append(clean_tok)
 
-    return clean_tokens
-
-#tweet_tokenizer = TweetTokenizer()
-#lemmatizer = WordNetLemmatizer()
 
 
 
 vect = CountVectorizer(stop_words=stopword_list, max_df=0.1, max_features=5000)
 
-lda = LatentDirichletAllocation(n_components = 7)
+number_of_topics = 8
+lda = LatentDirichletAllocation(n_components = number_of_topics)
 
 print("Fitting count vectorizer")
 model_vect = vect.fit_transform(X_train)
@@ -97,3 +81,25 @@ print(f"Training perplexity {training_perplexity}")
 print("Test data:")
 print(f"Holdout loglikelihood {holdout_loglikelihood}")
 print(f"Holdout perplexity {holdout_perplexity}")
+
+
+## Draw Word Cloud
+
+
+def draw_word_cloud(index):
+    imp_words_topic=""
+    comp=lda.components_[index]
+    vocab_comp = zip(feature_names, comp)
+    sorted_words = sorted(vocab_comp, key= lambda x:x[1], reverse=True)[:15]
+    for word in sorted_words:
+        imp_words_topic=imp_words_topic+" "+word[0]
+
+    wordcloud = WordCloud(width=600, height=400).generate(imp_words_topic)
+    plt.figure( figsize=(5,5))
+    plt.imshow(wordcloud)
+    plt.axis("off")
+    plt.tight_layout()
+    plt.savefig("./Figures/wordcloud_topic_{}".format(index+1))
+
+for i in range(number_of_topics):
+    draw_word_cloud(i)

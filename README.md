@@ -2,19 +2,42 @@
 
 ## Project Overview
 
-This project is part of the Udacity Data Scientist Nanodegree Program. Its purpose is to create a flask web app to illustrate insights from tweets about the European Central Bank (ECB) in 2021. Specifically, the following questions will be addressed:
+This project is part of the Udacity Data Scientist Nanodegree Program. Its purpose is analyse tweets about the European Central Bank (ECB) and obtain results about the volume of tweets, the sentiment of the tweets and the discussed topics. In addition, the projects creates a flask web app to illustrate some of those insights.
 
-Setting: The European Central Bank holds a policy meeting approximately every six weeks. An important part of monetary policy is the guidance of future expectations. For this reason, reactions on Twitter could be a useful signal for monetary policy.
+
 
 ## Problem Statement
+Specifically, the following questions will be addressed:
 
-- Does Twitter traffic (i.e. the number of tweets) respond to key ecb decision dates?
-- Does Twitter Sentiment change on days when the ECB decided on its monetary policy?
-- What are the topics discussed by users on Twitter and how do they change over time?
+- What are the topics discussed by users on Twitter? (Part 1)
+- Does Twitter traffic (i.e. the number of tweets) respond to key ecb decision dates? (Part 2)
+- Does Twitter Sentiment change on days when the ECB decided on its monetary policy? (Part 3)
+
+
+## Setting:
+
+The European Central Bank holds a policy meeting approximately every six weeks. An important part of monetary policy is the guidance of future expectations. For this reason, reactions / discussions on Twitter could be a useful signal for monetary policy.
 
 ## Metrics
 
-This analysis will mainly focus on two metrics:
+The topic modelling / Latent Dirichlet Allocation will focus on the metric of perplexity.
+
+Formally, the metric of perplexity is defined for a set of unseen documents $\omega$
+
+$$
+\text{Perplexity}(\omega) = \exp(-\frac{\mathcal{L}(\omega)}{\text{count of tokens}})
+$$
+where the log likehood function is itself defined as a probability of obtaining this unseen document given the topics $\Omega$ and a hyperparameter $\alpha$ governing the topic distribution of documents.
+$$
+\mathcal{L}(\omega) = \log p(\omega | \Omega, \alpha)
+$$
+(formal definitions taken from [this link](http://qpleple.com/perplexity-to-evaluate-topic-models/)).
+
+On a more intuitive level, perplexity is a statistic to describe how well a probability model (here, our topic model) predicts an unseen sample.(See also [here](https://cfss.uchicago.edu/notes/topic-modeling/#:~:text=Perplexity%20is%20a%20statistical%20measure,of%20words%20in%20your%20documents.))
+
+
+
+The analysis of Twitter traffic and the Sentiment Analysis will focus on the simpler and straightforward metrics of the number of tweets and the compound sentiment:
 
 - The daily number of tweets as a proxy for importance: More tweets mean that there is more discussion about the ECB on this particular day
 - The compound sentiment (provided by VaderSentiment, a sentiment analysis tool for social media, see link below). In short, a positive / negative score is associated to each word in the tweet. The compound
@@ -24,7 +47,7 @@ sentiment is the sum of all words in a tweet and then normalized to be between 0
 
 Two data sources are used for the web app:
 
-- A dataset of tweets that extracted tweets mentioning the European Central Bank from Twitter and that is stored in a AWS S3 Bucket
+- A dataset of tweets from 2021 mentioning the European Central Bank or the acronym ECB on Twitter. The dataset is stored in an AWS S3 Bucket
 - A dataset of ECB policy events scraped from the ECB website
 
 ## Files
@@ -41,6 +64,10 @@ This config file should be filled with the AWS credentials and the name of the A
 
 This python file scrapes all decision dates from the ECB's homepage and saves them as a csv in ecb_decision_dates.csv (located in webapp/data)
 
+- topic_modelling_with_tweets.py
+
+This file loads the tweets and applies the LDA topic modelling to it. The evaluation metrics and topics are printed to the console, the word clouds are saved in the folder ./Figures .
+
 - webapp_venv: This folder contains the virtual environment for running this repository and the webapp
 
 
@@ -54,6 +81,7 @@ This python file scrapes all decision dates from the ECB's homepage and saves th
 
 4. Run ecb_sentiment_app.py in the webapp folder. Open the suggested url (it may take a while to load). The url should look like the screenshot in results below.
 
+5. For the topic modelling, run the python script topic_modelling_with_tweets.py .
 
 ## Data Exploration
 
@@ -91,7 +119,7 @@ word 'Cricket'. This can be refined in the future by including more cricket spec
 
 ## Implementation
 
-See the description under "How to execute the analysis"
+See the description under "How to execute the analysis" in general.
 
 ## Refinement
 
@@ -99,7 +127,36 @@ The stopwords from NLTK do not capture all stopwords in Tweets (like RT for Retw
 Those words have been manually added to the list of stopwords to not influence the most often used words. Also some users feature in the most often used words,
 probably stemming from bots or bots replying to those users. Those users are also included in the list of stopwords.
 
-## Results / Justification
+## Model Results, Evaluation and Justification (regarding part 1)
+
+This section discusses the results of the topic model. Using Latent Dirichlet Allocation with eight components, the following topics have been found (here with the 10 most important words for them). In the figures folder, those topics are also illustrated using word clouds.
+
+Topic 1
+eur us week day usd meeting decision president fed today
+Topic 2
+bitcoin christine money president global business european laundering regulation currency
+Topic 3
+england test bcci pakistan tour players india series ipl match
+Topic 4
+key european today chief drop pairs jordan footsites fsn report
+Topic 5
+inflation policy european rates bond says monetary euro climate pandemic
+Topic 6
+world us time whole vaccinate come new support back order
+Topic 7
+euro digital european would people draghi money eu think want
+Topic 8
+balance sheet fed inflation assets printing total hit keeps ath
+
+The first topic seems to classify tweets discussing exchange rates and central bank meetings, which typically have an influence on the future path of exchange rates.
+The second topic seems to capture tweets about cryptocurrencies like bitcoin and central bank discussions whether those cryptocurrencies should be regulated to prevent money laundering.
+The third topic is about cricket and shows that for future work, more sophisticated cleaning steps are needed since the acronym ECB also captures the England Wales Cricket Board. For example, tweets with weight on the third topic could be used to classify a supervised machine learning model to eliminate cricket tweets.
+The fourth topic seems to be about economic news whereas the fifth topic captures discussions about inflation, monetary policy and interest rates.
+The sixth topic includes general world news, the seventh topic discussions about central bank digital currencies and finally, the eighth topic discussions about central bank balance sheets and asset prices.
+
+5% of the data are randomly withdrawn from this training data and used for model evaluation here. The perplexity on this holdout set is 1634. This is itself meaningless and difficult to interpret (see [link here]) but for comparison, the perplexity on the training data is 1449, showing that there is not too much loss in going from the training to the unseen data. 
+
+## Results / Justification (regarding part 2 and part 3)
 
 ![Screenshot](webapp_ecb.png)
 
