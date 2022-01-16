@@ -22,7 +22,7 @@ The European Central Bank holds a policy meeting approximately every six weeks. 
 
 The topic modelling / Latent Dirichlet Allocation will focus on the metric of perplexity.
 
-Formally, the metric of perplexity is defined for a set of unseen documents $\omega$
+Formally, the metric of perplexity is defined for a set of unseen documents $\omega$.
 
 $$
 \text{Perplexity}(\omega) = \exp(-\frac{\mathcal{L}(\omega)}{\text{count of tokens}})
@@ -31,9 +31,9 @@ where the log likehood function is itself defined as a probability of obtaining 
 $$
 \mathcal{L}(\omega) = \log p(\omega | \Omega, \alpha)
 $$
-(formal definitions taken from [this link](http://qpleple.com/perplexity-to-evaluate-topic-models/)).
+(See this link for formal definitions and better graph equations since GitHub's markdown does not seem to render the latex equations nicely [link](http://qpleple.com/perplexity-to-evaluate-topic-models/)).
 
-On a more intuitive level, perplexity is a statistic to describe how well a probability model (here, our topic model) predicts an unseen sample.(See also [here](https://cfss.uchicago.edu/notes/topic-modeling/#:~:text=Perplexity%20is%20a%20statistical%20measure,of%20words%20in%20your%20documents.))
+On a more intuitive level, perplexity is a statistic to describe how well a probability model (here, our topic model) predicts an unseen sample.(See, for example, [here](https://cfss.uchicago.edu/notes/topic-modeling/#:~:text=Perplexity%20is%20a%20statistical%20measure,of%20words%20in%20your%20documents.)). In general, a lower perplexity is more desirable as its inversely related to the log likelihood.
 
 
 
@@ -131,21 +131,28 @@ probably stemming from bots or bots replying to those users. Those users are als
 
 This section discusses the results of the topic model. Using Latent Dirichlet Allocation with eight components, the following topics have been found (here with the 10 most important words for them). In the figures folder, those topics are also illustrated using word clouds.
 
-Topic 1
+Topic 1:
 eur us week day usd meeting decision president fed today
-Topic 2
+
+Topic 2:
 bitcoin christine money president global business european laundering regulation currency
-Topic 3
+
+Topic 3:
 england test bcci pakistan tour players india series ipl match
-Topic 4
+
+Topic 4:
 key european today chief drop pairs jordan footsites fsn report
-Topic 5
+
+Topic 5:
 inflation policy european rates bond says monetary euro climate pandemic
-Topic 6
+
+Topic 6:
 world us time whole vaccinate come new support back order
-Topic 7
+
+Topic 7:
 euro digital european would people draghi money eu think want
-Topic 8
+
+Topic 8:
 balance sheet fed inflation assets printing total hit keeps ath
 
 The first topic seems to classify tweets discussing exchange rates and central bank meetings, which typically have an influence on the future path of exchange rates.
@@ -154,7 +161,7 @@ The third topic is about cricket and shows that for future work, more sophistica
 The fourth topic seems to be about economic news whereas the fifth topic captures discussions about inflation, monetary policy and interest rates.
 The sixth topic includes general world news, the seventh topic discussions about central bank digital currencies and finally, the eighth topic discussions about central bank balance sheets and asset prices.
 
-5% of the data are randomly withdrawn from this training data and used for model evaluation here. The perplexity on this holdout set is 1634. This is itself meaningless and difficult to interpret (see [link here]) but for comparison, the perplexity on the training data is 1449, showing that there is not too much loss in going from the training to the unseen data. 
+5% of the data are randomly withdrawn from this training data and used for model evaluation here. The perplexity on this holdout set is 1634. This is itself meaningless and difficult to interpret (see [link here](https://cfss.uchicago.edu/notes/topic-modeling/#:~:text=Perplexity%20is%20a%20statistical%20measure,of%20words%20in%20your%20documents.)) but for comparison, the perplexity on the training data is 1449, showing that there is not too much loss in going from the training to the unseen data.
 
 ## Results / Justification (regarding part 2 and part 3)
 
