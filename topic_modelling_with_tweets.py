@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.decomposition import LatentDirichletAllocation
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import TweetTokenizer
 from sklearn.feature_extraction.text import CountVectorizer
@@ -43,15 +43,19 @@ stopword_list = stopwords.words('english') + punct + ['rt', 'via', '…', '..', 
 
 vect = CountVectorizer(stop_words=stopword_list, max_df=0.1, max_features=5000)
 
-number_of_topics = 8
-lda = LatentDirichletAllocation(n_components = number_of_topics)
+search_params = {'n_components': [4, 6, 8]}
+
+lda_instance = LatentDirichletAllocation()
 
 print("Fitting count vectorizer")
 model_vect = vect.fit_transform(X_train)
 holdout_model_vect = vect.transform(X_test)
 print("Fitting LDA")
+lda = GridSearchCV(lda_instance, param_grid=search_params)
 lda.fit(model_vect)
 print("Fitting LDA done")
+print(lda.best_params_)
+number_of_topics = lda.best_params_['n_components']
 
 model_filepath = "./webapp/model/lda"
 print(f"Save model to {model_filepath}")

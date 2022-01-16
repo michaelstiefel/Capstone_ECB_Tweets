@@ -127,7 +127,7 @@ The stopwords from NLTK do not capture all stopwords in Tweets (like RT for Retw
 Those words have been manually added to the list of stopwords to not influence the most often used words. Also some users feature in the most often used words,
 probably stemming from bots or bots replying to those users. Those users are also included in the list of stopwords.
 
-## Model Results, Evaluation and Justification (regarding part 1)
+## Model Results (regarding part 1)
 
 This section discusses the results of the topic model. Using Latent Dirichlet Allocation with eight components, the following topics have been found (here with the 10 most important words for them). In the figures folder, those topics are also illustrated using word clouds.
 
@@ -161,7 +161,13 @@ The third topic is about cricket and shows that for future work, more sophistica
 The fourth topic seems to be about economic news whereas the fifth topic captures discussions about inflation, monetary policy and interest rates.
 The sixth topic includes general world news, the seventh topic discussions about central bank digital currencies and finally, the eighth topic discussions about central bank balance sheets and asset prices.
 
-5% of the data are randomly withdrawn from this training data and used for model evaluation here. The perplexity on this holdout set is 1634. This is itself meaningless and difficult to interpret (see [link here](https://cfss.uchicago.edu/notes/topic-modeling/#:~:text=Perplexity%20is%20a%20statistical%20measure,of%20words%20in%20your%20documents.)) but for comparison, the perplexity on the training data is 1449, showing that there is not too much loss in going from the training to the unseen data.
+## Model Evaluation and Refinement (regarding part 1)
+
+The by far most important parameter in estimating topic models is the number of topics. To hypertune this parameter, I am using GridSearch Crossvalidation. Essentially, this approach iterates through a provided list of numbers of topic and evaluates them by computing perplexity on the hold-out set. The number of topics that achieves the lowest perplexity on the hold-out set was eight, so eight topics were chosen for this topic modelling.
+
+It should be noted here, that while perplexity is an appropriate metric to search for the right number of topics, an important aspect in topic modelling is also the interpretability of the results and provided topics. As illustrated above, eight number of topics also results in an interesting set of topics which correspond to central bank discussions in the past year. In theory, further increasing the number of topics could give a lower perplexity, but would reduce the interpretability and thus the usefulness of the results. This trade-off between interpretability and the statistical optimal number of topics is a well-known fact in the literature (see this (paper)[https://papers.nips.cc/paper/2009/hash/f92586a25bb3145facd64ab20fd554ff-Abstract.html]). 
+
+Before fitting the model, 5% of the data were randomly withdrawn from this training data and are now used for model evaluation. The perplexity on this holdout set is 1634. This is itself meaningless and difficult to interpret (see [link here](https://cfss.uchicago.edu/notes/topic-modeling/#:~:text=Perplexity%20is%20a%20statistical%20measure,of%20words%20in%20your%20documents.)) but for comparison, the perplexity on the training data is 1449, showing that there is not too much loss in going from the training to the unseen data.
 
 ## Results / Justification (regarding part 2 and part 3)
 
