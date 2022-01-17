@@ -43,7 +43,7 @@ stopword_list = stopwords.words('english') + punct + ['rt', 'via', '…', '..', 
 
 vect = CountVectorizer(stop_words=stopword_list, max_df=0.1, max_features=5000)
 
-search_params = {'n_components': [4, 6, 8]}
+search_params = {'n_components': [6, 8]}
 
 lda_instance = LatentDirichletAllocation()
 
@@ -56,6 +56,8 @@ lda.fit(model_vect)
 print("Fitting LDA done")
 print(lda.best_params_)
 number_of_topics = lda.best_params_['n_components']
+
+lda = lda.best_estimator_
 
 model_filepath = "./webapp/model/lda"
 print(f"Save model to {model_filepath}")
